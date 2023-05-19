@@ -1,18 +1,18 @@
 FROM debian:11
 
 # Install necessary dependencies
-RUN apt-get update && apt-get install -y \
-    wget \
-    libc6-i386 \
-    lib32stdc++6 \
-    lib32gcc1 \
-    lib32ncurses6 \
-    lib32z1 \
-    libbz2-1.0:i386 \
-    libgtk-3-0:i386 \
-    libxslt1.1:i386 \
-    libnss3:i386 \
-    libasound2:i386
+RUN dpkg --add-architecture i386 && \
+    apt-get update && \
+    apt-get install -y \
+        wget \
+        libc6-i386 \
+        lib32stdc++6 \
+        lib32z1 \
+        libbz2-1.0:i386 \
+        libgtk-3-0:i386 \
+        libxslt1.1:i386 \
+        libnss3:i386 \
+        libasound2:i386
 
 # Download and install XAMPP
 RUN wget -O /tmp/xampp-installer.run "https://yer.dl.sourceforge.net/project/xampp/XAMPP%20Linux/8.2.4/xampp-linux-x64-8.2.4-0-installer.run" \

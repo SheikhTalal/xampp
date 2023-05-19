@@ -17,7 +17,7 @@ RUN dpkg --add-architecture i386 && \
 
 # Download and install XAMPP
 RUN cd /tmp/ \
-    wget -O xampp-installer.run "https://yer.dl.sourceforge.net/project/xampp/XAMPP%20Linux/8.2.4/xampp-linux-x64-8.2.4-0-installer.run" \
+    wget -O xampp-installer.run https://yer.dl.sourceforge.net/project/xampp/XAMPP%20Linux/8.2.4/xampp-linux-x64-8.2.4-0-installer.run \
     && chmod +x xampp-installer.run \
     && sudo ./xampp-installer.run
 

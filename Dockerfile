@@ -16,6 +16,18 @@ RUN dpkg --add-architecture i386 && \
         libnss3:i386 \
         libasound2:i386
 
+# Set root password to root, format is 'user:password'.
+RUN echo 'root:root' | chpasswd
+
+RUN apt-get update --fix-missing && \
+  apt-get upgrade -y && \
+  # curl is needed to download the xampp installer, net-tools provides netstat command for xampp
+  apt-get -y install curl net-tools && \
+  apt-get -yq install openssh-server supervisor && \
+  # Few handy utilities which are nice to have
+  apt-get -y install nano vim less --no-install-recommends && \
+  apt-get clean
+  
 # Download and install XAMPP
 RUN wget -O /tmp/xampp-installer.run "https://yer.dl.sourceforge.net/project/xampp/XAMPP%20Linux/8.2.4/xampp-linux-x64-8.2.4-0-installer.run" \
     && sudo chmod +x /tmp/xampp-installer.run \

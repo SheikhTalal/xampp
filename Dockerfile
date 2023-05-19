@@ -1,54 +1,41 @@
-# Stage 1: PHP 7.4 with Apache
-FROM php:7.4-apache AS php7
+FROM debian:11
 
-WORKDIR /var/www/html/php7
-
-# Copy your PHP 7.4 project files to the container
-COPY htdocs /var/www/html/php7
-
-# Install additional dependencies if needed
-RUN docker-php-ext-install mysqli
-
-# Stage 2: PHP 8.1 with Apache
-FROM php:8.1-apache AS php8_1
-
-WORKDIR /var/www/html/php8_1
-
-# Copy your PHP 8.1 project files to the container
-COPY htdocs /var/www/html/php8_1
-
-# Install additional dependencies if needed
-RUN docker-php-ext-install mysqli
-
-# Stage 3: PHP 8.2 with Apache
-FROM php:8.2-apache AS php8_2
-
-WORKDIR /var/www/html/php8_2
-
-# Copy your PHP 8.2 project files to the container
-COPY htdocs /var/www/html/php8_2
-
-# Install additional dependencies if needed
-RUN docker-php-ext-install mysqli
-
-# Stage 4: Final stage with PHP 8.2 and additional services
-FROM php:8.2-apache
-
-WORKDIR /var/www/html
-
-# Copy the desired PHP version from the corresponding stage
-COPY --from=php7 /var/www/html/php7 /var/www/html/php7
-COPY --from=php8_1 /var/www/html/php8_1 /var/www/html/php8_1
-COPY --from=php8_2 /var/www/html/php8_2 /var/www/html/php8_2
-
-# Install MySQL and phpMyAdmin
+# Install necessary dependencies
 RUN apt-get update && apt-get install -y \
-    mariadb-server \
-    phpmyadmin
+    wget \
+    libc6-i386 \
+    lib32stdc++6 \
+    lib32gcc1 \
+    lib32ncurses6 \
+    lib32z1 \
+    libbz2-1.0:i386 \
+    libgtk-3-0:i386 \
+    libxslt1.1:i386 \
+    libnss3:i386 \
+    libasound2:i386
 
-# Expose ports 80 for HTTP and 3306 for MySQL
+# Download and install XAMPP
+RUN wget -O /tmp/xampp-installer.run "https://yer.dl.sourceforge.net/project/xampp/XAMPP%20Linux/8.2.4/xampp-linux-x64-8.2.4-0-installer.run" \
+    && chmod 755 /tmp/xampp-installer.run \
+    && /tmp/xampp-installer.run --mode unattended --installer-language English
+
+# Copy Apache configuration files
+COPY httpd.conf /opt/lampp/etc/httpd.conf
+COPY httpd-xampp.conf /opt/lampp/etc/extra/httpd-xampp.conf
+
+# Copy PHP configuration file
+COPY php.ini /opt/lampp/etc/php.ini
+
+# Copy MySQL configuration file
+COPY my.cnf /opt/lampp/etc/my.cnf
+
+# Copy ProFTPD configuration file
+COPY proftpd.conf /opt/lampp/etc/proftpd.conf
+
+# Start XAMPP
+CMD ["bash", "-c", "sudo /opt/lampp/lampp start"]
+
+# Expose necessary ports for Apache and MySQL
 EXPOSE 80
+EXPOSE 443
 EXPOSE 3306
-
-# Start the Apache web server and MySQL when the container launches
-CMD ["bash", "-c", "service mysql start && apache2-foreground"]

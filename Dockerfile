@@ -6,6 +6,7 @@ RUN dpkg --add-architecture i386 && \
     apt-get install -y \
         curl \
         sudo \
+        apt-utils \
         libc6-i386 \
         lib32stdc++6 \
         lib32z1 \
@@ -16,8 +17,7 @@ RUN dpkg --add-architecture i386 && \
         libasound2:i386
 
 # Download and install XAMPP
-RUN curl -fsSL -o /tmp/xampp-installer.run \
-         "https://yer.dl.sourceforge.net/project/xampp/XAMPP%20Linux/8.2.4/xampp-linux-x64-8.2.4-0-installer.run"; \
+RUN curl -fsSL -o /tmp/xampp-installer.run "https://yer.dl.sourceforge.net/project/xampp/XAMPP%20Linux/8.2.4/xampp-linux-x64-8.2.4-0-installer.run"; \
     && chmod +x xampp-installer.run \
     && sudo ./xampp-installer.run
 

@@ -4,7 +4,7 @@ FROM php:7.4-apache AS php7
 WORKDIR /var/www/html/php7
 
 # Copy your PHP 7.4 project files to the container
-COPY ./htdocs /var/www/html/php7
+COPY htdocs /var/www/html/php7
 
 # Install additional dependencies if needed
 RUN docker-php-ext-install mysqli
@@ -15,7 +15,7 @@ FROM php:8.1-apache AS php8_1
 WORKDIR /var/www/html/php8_1
 
 # Copy your PHP 8.1 project files to the container
-COPY ./htdocs /var/www/html/php8_1
+COPY htdocs /var/www/html/php8_1
 
 # Install additional dependencies if needed
 RUN docker-php-ext-install mysqli
@@ -26,7 +26,7 @@ FROM php:8.2-apache AS php8_2
 WORKDIR /var/www/html/php8_2
 
 # Copy your PHP 8.2 project files to the container
-COPY ./htdocs /var/www/html/php8_2
+COPY htdocs /var/www/html/php8_2
 
 # Install additional dependencies if needed
 RUN docker-php-ext-install mysqli

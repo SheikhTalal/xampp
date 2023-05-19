@@ -6,6 +6,7 @@ RUN dpkg --add-architecture i386 && \
     apt-get install -y \
         wget \
         sudo \
+        vim \
         apt-utils \
         libc6-i386 \
         lib32stdc++6 \
@@ -25,7 +26,7 @@ RUN apt-get update --fix-missing && \
   apt-get -y install curl net-tools && \
   apt-get -yq install openssh-server supervisor && \
   # Few handy utilities which are nice to have
-  apt-get -y install nano vim less --no-install-recommends && \
+  apt-get -y install nano less --no-install-recommends && \
   apt-get clean
   
 # Download and install XAMPP

@@ -20,24 +20,41 @@ RUN dpkg --add-architecture i386 && \
 RUN wget -O /tmp/xampp-installer.run "https://yer.dl.sourceforge.net/project/xampp/XAMPP%20Linux/8.2.4/xampp-linux-x64-8.2.4-0-installer.run" \
     && sudo chmod +x /tmp/xampp-installer.run \
     && sudo /tmp/xampp-installer.run --mode unattended --installer-language en
+    && ln -sf /opt/lampp/lampp /usr/bin/lampp && \
+  # Enable XAMPP web interface(remove security checks)
+    sed -i.bak s'/Require local/Require all granted/g' /opt/lampp/etc/extra/httpd-xampp.conf && \
+  # Enable error display in php
+    sed -i.bak s'/display_errors=Off/display_errors=On/g' /opt/lampp/etc/php.ini && \
+  # Enable includes of several configuration files
+    mkdir /opt/lampp/apache2/conf.d && \
+    echo "IncludeOptional /opt/lampp/apache2/conf.d/*.conf" >> /opt/lampp/etc/httpd.conf && \
+  # Create a /www folder and a symbolic link to it in /opt/lampp/htdocs. It'll be accessible via http://localhost:[port]/www/
+  # This is convenient because it doesn't interfere with xampp, phpmyadmin or other tools in /opt/lampp/htdocs
+    mkdir /www && \
+    ln -s /www /opt/lampp/htdocs && \
+  # SSH server
+    mkdir -p /var/run/sshd && \
+  # Allow root login via password
+    sed -ri 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/g' /etc/ssh/sshd_config
 
-# Copy Apache configuration files
-COPY httpd.conf /opt/lampp/etc/httpd.conf
-COPY httpd-xampp.conf /opt/lampp/etc/extra/httpd-xampp.conf
+# copy supervisor config file to start openssh-server
+RUN { \
+     echo '[program:openssh-server]'; \
+     echo 'command=/usr/sbin/sshd -D'; \
+     echo 'numprocs=1'; \
+     echo 'autostart=true'; \
+     echo 'autorestart=true'; \
+     } > "/etc/supervisor/conf.d/supervisord-openssh-server.conf";
+RUN { \
+        echo '/opt/lampp/lampp start'; \
+        echo '/usr/bin/supervisord -n'; \        
+    } > "/startup.sh";
 
-# Copy PHP configuration file
-COPY php.ini /opt/lampp/etc/php.ini
 
-# Copy MySQL configuration file
-COPY my.cnf /opt/lampp/etc/my.cnf
+VOLUME [ "/var/log/mysql/", "/var/log/apache2/", "/www", "/opt/lampp/apache2/conf.d/" ]
 
-# Copy ProFTPD configuration file
-COPY proftpd.conf /opt/lampp/etc/proftpd.conf
-
-# Start XAMPP
-CMD ["bash", "-c", "sudo /opt/lampp/lampp start"]
-
-# Expose necessary ports for Apache and MySQL
-EXPOSE 80
-EXPOSE 443
 EXPOSE 3306
+EXPOSE 22
+EXPOSE 80
+
+CMD ["sh", "/startup.sh"]

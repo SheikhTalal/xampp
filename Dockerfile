@@ -19,7 +19,7 @@ RUN dpkg --add-architecture i386 && \
 # Download and install XAMPP
 RUN wget -O /tmp/xampp-installer.run "https://yer.dl.sourceforge.net/project/xampp/XAMPP%20Linux/8.2.4/xampp-linux-x64-8.2.4-0-installer.run" \
     && sudo chmod +x /tmp/xampp-installer.run \
-    && sudo /tmp/xampp-installer.run --mode unattended --installer-language en
+    && sudo /tmp/xampp-installer.run --mode unattended --installer-language en \
     && ln -sf /opt/lampp/lampp /usr/bin/lampp && \
   # Enable XAMPP web interface(remove security checks)
     sed -i.bak s'/Require local/Require all granted/g' /opt/lampp/etc/extra/httpd-xampp.conf && \

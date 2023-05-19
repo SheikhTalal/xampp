@@ -16,7 +16,7 @@ RUN dpkg --add-architecture i386 && \
         libasound2:i386
 
 # Download and install XAMPP
-RUN wget -O "https://yer.dl.sourceforge.net/project/xampp/XAMPP%20Linux/8.2.4/xampp-linux-x64-8.2.4-0-installer.run" \
+RUN wget -O https://yer.dl.sourceforge.net/project/xampp/XAMPP%20Linux/8.2.4/xampp-linux-x64-8.2.4-0-installer.run \
     && mv xampp-linux-x64-8.2.4-0-installer.run /tmp/xampp-installer.run \
     && cd /tmp/ \
     && chmod +x xampp-installer.run \

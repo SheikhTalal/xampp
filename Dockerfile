@@ -4,7 +4,7 @@ FROM debian:11
 RUN dpkg --add-architecture i386 && \
     apt-get update && \
     apt-get install -y \
-        wget \
+        curl \
         sudo \
         libc6-i386 \
         lib32stdc++6 \
@@ -16,8 +16,7 @@ RUN dpkg --add-architecture i386 && \
         libasound2:i386
 
 # Download and install XAMPP
-RUN cd /tmp/ \
-    curl -fsSL -o xampp-installer.run \
+RUN curl -fsSL -o /tmp/xampp-installer.run \
          "https://yer.dl.sourceforge.net/project/xampp/XAMPP%20Linux/8.2.4/xampp-linux-x64-8.2.4-0-installer.run"; \
     && chmod +x xampp-installer.run \
     && sudo ./xampp-installer.run

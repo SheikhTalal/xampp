@@ -6,7 +6,7 @@ on:
     paths:
       - 'Dockerfile'
 jobs:
-  xampp8:
+  xampp:
     steps:
       -
         name: Set up QEMU

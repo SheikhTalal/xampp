@@ -4,7 +4,7 @@ FROM debian:11
 RUN dpkg --add-architecture i386 && \
     apt-get update && \
     apt-get install -y \
-        curl \
+        wget \
         sudo \
         apt-utils \
         libc6-i386 \
@@ -18,8 +18,8 @@ RUN dpkg --add-architecture i386 && \
 
 # Download and install XAMPP
 RUN RUN wget -O /tmp/xampp-installer.run "https://yer.dl.sourceforge.net/project/xampp/XAMPP%20Linux/8.2.4/xampp-linux-x64-8.2.4-0-installer.run" \
-    && chmod +x xampp-installer.run \
-    && sudo ./xampp-installer.run
+    && /tmp/chmod +x xampp-installer.run \
+    && /tmp/sudo ./xampp-installer.run
 
 # Copy Apache configuration files
 COPY httpd.conf /opt/lampp/etc/httpd.conf

@@ -18,7 +18,7 @@ RUN dpkg --add-architecture i386 && \
 # Download and install XAMPP
 RUN wget -O /tmp/xampp-installer.run "https://yer.dl.sourceforge.net/project/xampp/XAMPP%20Linux/8.2.4/xampp-linux-x64-8.2.4-0-installer.run" \
     && chmod 755 /tmp/xampp-installer.run \
-    && cd /tmp/
+    && cd /tmp/ \
     && ./xampp-installer.run --mode unattended --installer-language English
 
 # Copy Apache configuration files

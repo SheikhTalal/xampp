@@ -16,10 +16,10 @@ RUN dpkg --add-architecture i386 && \
         libasound2:i386
 
 # Download and install XAMPP
-RUN wget -O /tmp/xampp-installer.run "https://yer.dl.sourceforge.net/project/xampp/XAMPP%20Linux/8.2.4/xampp-linux-x64-8.2.4-0-installer.run" \
-    && chmod 755 /tmp/xampp-installer.run \
-    && cd /tmp/ \
-    && ./xampp-installer.run --mode unattended --installer-language English
+RUN cd /tmp/ \
+    wget -O xampp-installer.run "https://yer.dl.sourceforge.net/project/xampp/XAMPP%20Linux/8.2.4/xampp-linux-x64-8.2.4-0-installer.run" \
+    && chmod +x xampp-installer.run \
+    && sudo ./xampp-installer.run
 
 # Copy Apache configuration files
 COPY httpd.conf /opt/lampp/etc/httpd.conf
